@@ -3,23 +3,24 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-
+const connection = require("./database/connection")
 
 dotenv.config();
 
 //conexion a bbdd
-mongoose
-  .connect(process.env.DB)
-  .then(() => {
-    console.log("conexion exitosa");
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
+// mongoose
+//   .connect(process.env.DB)
+//   .then(() => {
+//     console.log("conexion exitosa");
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
+connection();
+console.log("API exitosa");
 //crear servidor node
 const app = express();
-
+const puerto = 3000;
 //configurar cors
 app.use(cors())
 
@@ -37,6 +38,6 @@ app.use("/api/follow", followRoutes);
 app.use('/api/publication', publicationRoutes);
 
 //poner servidor a escuchar peticiones
-app.listen(process.env.PORT, () => {
-  console.log(`Server iniciado en el puerto: ${process.env.PORT}`);
-});
+app.listen(puerto, ()=>{
+  console.log("Servidor de node corriendo en el puerto:",puerto);
+})

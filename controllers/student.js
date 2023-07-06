@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 const Student = require('../models/student')
 const jwt = require('../services/jwt')
 const fs = require('fs');
@@ -9,8 +9,7 @@ const Follow = require('../models/follow');
 
 const pruebaStudent = (req, res) => {
     return res.status(200).send({
-        menssage:"prueba ruta",
-        Student: req.student
+        menssage:"prueba ruta"
     })
 }
 
