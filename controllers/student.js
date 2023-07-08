@@ -71,7 +71,7 @@ const login = (req, res) => {
     const params = req.body;
 
     if (!params.email || !params.password) {
-        return res.status(500).send("faltan datos")
+        return res.status(500).send({message:"faltan datos"})
     }
     //buscar si existe en la bd
     Student.findOne({email: params.email})
@@ -79,13 +79,14 @@ const login = (req, res) => {
         // .select({"password":0})
         .exec((error, student)=> {
             if (error || !student) {
-                return res.status(404).send("error al encontrar usuario")
+                return res.status(404).send({message:"error al encontrar usuario"})
             }
             //comprobar contraseña
             const pwd = bcrypt.compareSync(params.password, student.password)
 
             if (!pwd) {
-                return res.status(404).send("Contraseña incorrecta!!")
+                return res.status(404).send({
+                    message: "Contraseña incorrecta!!"})
             }
             //conseguir token
             const token = jwt.createToken(student)
@@ -155,6 +156,7 @@ const list = (req, res) => {
                          menssage:"listando...",
                          students: students,
                          itemsPerPage,
+                         total,
                          totalPages: Math.ceil(students.total / itemsPerPage),
                          student_following: followStudentIds.following,
                         student_follow_me: followStudentIds.followers
@@ -296,7 +298,7 @@ const profilePicture = (req, res) => {
 
     //mostrar el path de la imagen
     const filePath = "./uploads/profilePictures/" + file;
-    console.log(filePath);
+    // console.log(filePath);
     //comprobar si existe la imagen
     fs.stat(filePath, (error, exists) => {
         if (error || !exists) {

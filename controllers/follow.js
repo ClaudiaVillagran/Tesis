@@ -22,7 +22,7 @@ const save = (req, res) => {
     });
     //gaurdar objetos de follow en la base de datos
     userToFollow.save((error, followStored) => {
-        console.log(followStored);
+        // console.log(followStored);
         if (error || !followStored) {
             return res.status(500).send({
                 message: 'Error al guardar el follow'
