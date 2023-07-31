@@ -29,6 +29,7 @@ const save = (req, res) => {
             });
         }
         return res.status(200).send({
+            status: 'success',
             message: 'follow guardado',
             student: identity,
             follow: followStored
@@ -53,6 +54,7 @@ const unFollow = (req, res) => {
             });
         }
         return res.status(200).send({
+            status: 'success',
             message: 'follow eliminado',
             student: identityId,
             unFollow: followDeleted
@@ -93,6 +95,7 @@ const following = (req, res) => {
                 });
             }
             return res.status(200).send({
+                status: "success",
                 message: 'Listando estudiantes que sigo',
                 follows,
                 total,
@@ -107,7 +110,7 @@ const following = (req, res) => {
 
 //accion listado de estudiantes que me siguen
 
-const followedBy = (req, res) => {
+const followers = (req, res) => {
     //sacar el id del estudiante identificado
     let identityId = req.student.id;
     //comprobar si me llega el id en la url
@@ -138,6 +141,7 @@ const followedBy = (req, res) => {
                 });
             }
             return res.status(200).send({
+                status: "success",
                 message: 'listo estudiantes que me siguen',
                 follows,
                 total,
@@ -153,5 +157,5 @@ module.exports = {
     save,
     unFollow,
     following,
-    followedBy
+    followers
 };

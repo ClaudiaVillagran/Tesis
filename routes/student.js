@@ -8,10 +8,10 @@ const check = require('../middlewares/auth');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './uploads/profilePictures')
+        cb(null, './uploads/profilePictures/')
     },
     filename: function (req, file, cb) {
-        cb(null, "profilePicture"+Date.now()+"-"+ file.originalname)
+        cb(null, "profilePicture-"+Date.now()+"-"+ file.originalname)
     }
 });
 

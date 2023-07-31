@@ -7,7 +7,7 @@ const check = require('../middlewares/auth');
 api.post('/save', check.auth, followController.save);
 api.delete('/unFollow/:id', check.auth, followController.unFollow);
 api.get('/following/:id?/:page?', check.auth, followController.following);
-api.get('/followedBy/:id?/:page?', check.auth, followController.followedBy);
+api.get('/followers/:id?/:page?', check.auth, followController.followers);
 
 //exportar rutas
 module.exports = api;

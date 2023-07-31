@@ -21,7 +21,7 @@ api.post('/save', check.auth, publicationController.save);
 api.get('/detailPublication/:id', check.auth, publicationController.detailPublication);
 api.delete('/deletePublication/:id', check.auth, publicationController.deletePublication);
 api.get('/publicationStudent/:id/:page?', check.auth, publicationController.publicationStudent);
-api.post('/upload/:id', [check.auth,uploads.single('upload0')], publicationController.upload);
+api.post('/upload/:id', [check.auth, uploads.single('upload0')], publicationController.upload);
 api.get('/media/:file', publicationController.media);
 api.get('/feed/:page?', check.auth, publicationController.feed);
 

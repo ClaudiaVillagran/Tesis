@@ -6,6 +6,7 @@ const path = require('path');
 const followService = require('../services/followStudentIds');
 const Publication = require('../models/publication');
 const Follow = require('../models/follow');
+const validate = require('../helpers/validate');
 
 const pruebaStudent = (req, res) => {
     return res.status(200).send({
@@ -125,7 +126,7 @@ const profile = (req, res) => {
             status: "success",
             menssage:"profilando...",
             student: studentProfile,
-            followig: followInfo.following,
+            following: followInfo.following,
             follower: followInfo.follower
         })
 
@@ -277,7 +278,7 @@ const uploadImage = (req, res) => {
     }
 
     //si es jpg, agregar la imagen a la base de datos
-    Student.findByIdAndUpdate({ _id: req.student.id}, {image: req.file.filename}, {new: true}, (error, studentUpdated) => {
+    Student.findOneAndUpdate({ _id: req.student.id}, {image: req.file.filename}, {new: true}, (error, studentUpdated) => {
             if (error || !studentUpdated) {
                 return res.status(500).send( "error al subir la foto de perfil")
             }
@@ -322,6 +323,7 @@ const counter = async (req, res) => {
         const publicationsCount = await Publication.count({'student': studentId});
 
         return res.status(200).send({
+            status: "success",
             studentId,
             followingCount,
             followedCount,

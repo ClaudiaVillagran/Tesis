@@ -9,9 +9,8 @@ const publicationSchema = Schema({
         type: String,
         required: true
     },
-    file:{
-        type: String,
-    },
+    file: String,
+    categories: String,
     created_at: {
         type: Date,
         default: Date.now

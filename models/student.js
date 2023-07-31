@@ -18,6 +18,9 @@ const studentSchema = Schema ({
         type: String,
         default: "default.png"
     },
+    interestes:{
+        type: String
+    },
     created_at: {
         type: Date,
         default: Date.now

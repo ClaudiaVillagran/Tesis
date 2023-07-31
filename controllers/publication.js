@@ -23,6 +23,7 @@ const save = (req, res) => {
                 return res.status(500).send('no se pudo guardar la publicacion');
             }
             return res.status(200).send({
+                status: "success",
                 message: 'Publicacion guardada',
                 publicationStored
             });
@@ -40,6 +41,7 @@ const detailPublication = (req, res) => {
                 return res.status(500).send('no se pudo encontrar la publicacion');
             }
             return res.status(200).send({
+                status: "success",
                 message: 'Detalle de la publicacion solicitada',
                 publicationFound
             });
@@ -55,6 +57,7 @@ const deletePublication = (req, res) => {
             return res.status(500).send('no se pudo encontrar la publicacion');
         }
         return res.status(200).send({
+            status: "success",
             message: 'Publicacion eliminada',
             publicationRemoved
         });
@@ -83,6 +86,7 @@ const publicationStudent = (req, res) => {
                 return res.status(500).send('no se pudo encontrar publicaciones');
             }
             return res.status(200).send({
+                status: "success",
                 message: 'Publicaciones del estudiante',
                 publications,
                 page,
@@ -93,39 +97,55 @@ const publicationStudent = (req, res) => {
 };
 //subir ficheros
 const upload = (req, res) => {
+    // Sacar publication id
     const publicationId = req.params.id;
-    //recoger el fichero de imagen y comprobar si existe
-    if (!req.file) {
-        return res.status(404).send( "no ha agregado ninguna imagen")
-    }
-    //conseguir el nombre del archivo
-    const image = req.file.originalname;
 
-    //sacar la extension del archivo
-    const imageSplit = image.split(".");
+    // Recoger el fichero de imagen y comprobar que existe
+    if (!req.file) {
+        return res.status(404).send({
+            status: "error",
+            message: "Petición no incluye la imagen"
+        });
+    }
+
+    // Conseguir el nombre del archivo
+    let image = req.file.originalname;
+
+    // Sacar la extension del archivo
+    const imageSplit = image.split("\.");
     const extension = imageSplit[1];
-    //comprobar si es jpg
-    if (extension != "jpg" && extension!= "jpeg"  && extension != "png" && extension != "gif") {
-        //si no es jpg, borrar la imagen
+    console.log(extension);
+    // Comprobar extension
+    if (extension != "png" && extension != "jpg" && extension != "jpeg" && extension != "gif") {
+
+        // Borrar archivo subido
         const filePath = req.file.path;
         const fileDeleted = fs.unlinkSync(filePath);
 
-        return res.status(400).send("La extension del archivo no es valido");
+        // Devolver respuesta negativa
+        return res.status(400).send({
+            status: "error",
+            message: "Extensión del fichero invalida"
+        });
     }
 
-    //si es jpg, agregar la imagen a la base de datos
-    //finOneAndUpdate({1},{2}) -> 1: condicion, 2: update
-    Publication.findByIdAndUpdate({'student': req.student.id, '_id': publicationId}, {file: req.file.filename}, {new: true}, (error, publicationUpdated) => {
-            if (error || !publicationUpdated) {
-                return res.status(500).send( "error al subir la imagen en la publicacion")
-            }
-            return res.status(200).json({
-                status: "success",
-                menssage:"Actualizando...",
-                student: publicationUpdated,
-                file: req.file
-            });
+    // Si si es correcta, guardar imagen en bbdd
+    Publication.findOneAndUpdate({ "student": req.student.id, "_id": publicationId }, { file: req.file.filename }, { new: true }, (error, publicationUpdated) => {
+        if (error || !publicationUpdated) {
+            return res.status(500).send({
+                status: "error",
+                message: "Error en la subida del avatar"
+            })
+        }
+
+        // Devolver respuesta
+        return res.status(200).send({
+            status: "success",
+            publication: publicationUpdated,
+            file: req.file,
         });
+    });
+
 }
 //devolver archivos multimedia
 const media = (req, res) => {
@@ -167,6 +187,7 @@ const feed = async (req, res) => {
                                                                 return res.status(500).send('no se pudo encontrar publicaciones');
                                                             }
                                                             return res.status(200).send({
+                                                                status: "success",
                                                                 message: 'feed',
                                                                 following: myFollows.following,
                                                                 publications,
